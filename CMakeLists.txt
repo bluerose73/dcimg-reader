@@ -21,3 +21,11 @@ target_link_libraries(dcimg_read_frame "${CMAKE_SOURCE_DIR}/dcimgapi/dcimgapi.li
 add_executable(test_read test/test_read.cpp dcimg_mex/impl/dcimg_ops.cpp)
 target_include_directories(test_read PRIVATE .)
 target_link_libraries(test_read "${CMAKE_SOURCE_DIR}/dcimgapi/dcimgapi.lib")
+
+add_custom_command(
+    TARGET dcimg_get_size POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+    "${CMAKE_SOURCE_DIR}/dcimgapi/dcimgapi.dll"
+    "$<TARGET_FILE_DIR:dcimg_get_size>"
+    COMMENT "Copying dcimgapi.dll to output directory"
+)
