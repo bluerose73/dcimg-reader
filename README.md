@@ -4,7 +4,7 @@ Read DCIMG images to MATLAB.
 
 ## Usage
 
-Add ``dcimg_get_size.mexw64``, ``dcimg_read_frame.mexw64``, and ``dcimg_read_all.mexw64``  to MATLAB path.
+Add ``dcimg_get_size.mexw64`` and ``dcimg_read_frame.mexw64`` to MATLAB path.
 
 Call the functions
 
@@ -12,8 +12,6 @@ Call the functions
 [n_frames, height, width] = dcimg_get_size('filename.dcimg')
 
 image = dcimg_read_frame('filename.dcimg', 1)  % frame id is 1-indexed
-
-image_stack = dcimg_read_all('filename.dcimg')
 ```
 
 ## Build
@@ -32,5 +30,5 @@ Run the following lines in the top-level directory of this repository.
 mkdir build
 cd build
 cmake ..
-cmake --build .
+cmake —-build . —-config Release
 ```

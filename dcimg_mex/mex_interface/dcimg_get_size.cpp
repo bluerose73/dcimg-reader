@@ -6,19 +6,23 @@
  *
  * Description:
  *   Get number of frames, height, and width of a DCIMG image stack.
+ *
+ *   Assumes the DCIMG file has only one session.
+ *   In case of more than one sessions, the size of the first session is returned.
+ *
  *   This source file intends to be compiled to a mex file and called from MATLAB.
  *
  * Usage:
  *   [n_frames, height, width] = dcimg_get_size(filename)
  *
  * Args:
- *   filename: single-quoted character vector, DCIMG filename.
+ *   filename (single-quoted character vector): DCIMG filename.
  *             Must have ASCII characters only.
  *
  * Return:
- *   n_frames: double, number of frames
- *   height: double, image height (number of rows)
- *   width: double, image width (number of columns)
+ *   n_frames (double): Number of frames
+ *   height (double): Image height (number of rows)
+ *   width: (double): Image width (number of columns)
  */
 
 #include <dcimg_mex/impl/dcimg_ops.hpp>
