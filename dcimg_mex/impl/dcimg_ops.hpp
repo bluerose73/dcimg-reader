@@ -16,7 +16,7 @@
 #include <string>
 
 int dcimg_get_size(const std::string &filename, int *n_frames, int *height,
-                   int *width);
+                   int *width, int *pixel_bytes);
 
 /* Reads one frame from DCIMG file.
  *

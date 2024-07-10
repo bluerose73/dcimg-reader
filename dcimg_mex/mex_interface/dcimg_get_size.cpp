@@ -42,10 +42,11 @@ public:
     }
 
     const CharArray filename = inputs[0];
-    int n_frames, height, width;
+    int n_frames, height, width, pixel_bytes;
 
     // This line is where real work happens
-    ret_code = dcimg_get_size(filename.toAscii(), &n_frames, &height, &width);
+    ret_code =
+        dcimg_get_size(filename.toAscii(), &n_frames, &height, &width, &pixel_bytes);
 
     if (ret_code != 0) {
       std::shared_ptr<matlab::engine::MATLABEngine> matlabPtr = getEngine();
