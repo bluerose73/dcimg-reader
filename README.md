@@ -9,7 +9,7 @@ Add ``dcimg_get_size.mexw64`` and ``dcimg_read_frame.mexw64`` to MATLAB path.
 Call the functions
 
 ```MATLAB
-[n_frames, height, width] = dcimg_get_size('filename.dcimg')
+[height, width, n_frames] = dcimg_get_size('filename.dcimg')
 
 image = dcimg_read_frame('filename.dcimg', 1)  % frame id is 1-indexed
 ```
