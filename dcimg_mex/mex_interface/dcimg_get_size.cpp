@@ -5,7 +5,7 @@
  *   Shengjie Ma
  *
  * Description:
- *   Get number of frames, height, and width of a DCIMG image stack.
+ *   Get height, width, and number of frames of a DCIMG image stack.
  *
  *   Assumes the DCIMG file has only one session.
  *   In case of more than one sessions, the size of the first session is returned.
@@ -13,7 +13,7 @@
  *   This source file intends to be compiled to a mex file and called from MATLAB.
  *
  * Usage:
- *   [n_frames, height, width] = dcimg_get_size(filename)
+ *   [height, width, nframes] = dcimg_get_size(filename)
  *
  * Args:
  *   filename (single-quoted character vector): DCIMG filename.
@@ -55,9 +55,9 @@ public:
     }
 
     ArrayFactory factory;
-    outputs[0] = factory.createScalar<double>(n_frames);
-    outputs[1] = factory.createScalar<double>(height);
-    outputs[2] = factory.createScalar<double>(width);
+    outputs[0] = factory.createScalar<double>(height);
+    outputs[1] = factory.createScalar<double>(width);
+    outputs[2] = factory.createScalar<double>(n_frames);
   }
 
 private:

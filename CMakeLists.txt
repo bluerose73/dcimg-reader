@@ -29,3 +29,11 @@ add_custom_command(
     "$<TARGET_FILE_DIR:dcimg_get_size>"
     COMMENT "Copying dcimgapi.dll to output directory"
 )
+
+
+find_package(JNI REQUIRED)
+
+add_library(dcimg_jni SHARED fiji_plugin/src/main/cpp/io_bluerose73_fiji_dcimg_DcimgReader.cpp
+                            dcimg_mex/impl/dcimg_ops.cpp)
+target_include_directories(dcimg_jni PRIVATE . "${JNI_INCLUDE_DIRS}")
+target_link_libraries(dcimg_jni "${CMAKE_SOURCE_DIR}/dcimgapi/dcimgapi.lib")
