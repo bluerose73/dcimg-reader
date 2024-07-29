@@ -9,7 +9,7 @@
 		<relativePath />
 	</parent>
 
-	<groupId>io.bluerose73</groupId>
+	<groupId>io.github.bluerose73</groupId>
 	<artifactId>DCIMG_Format</artifactId>
 	<version>1.0.0</version>
 

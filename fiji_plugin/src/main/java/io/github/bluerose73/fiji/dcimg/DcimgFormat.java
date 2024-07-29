@@ -1,4 +1,4 @@
-package io.bluerose73.fiji.dcimg;
+package io.github.bluerose73.fiji.dcimg;
 
 import org.scijava.plugin.Plugin;
 

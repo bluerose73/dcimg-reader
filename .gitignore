@@ -14,3 +14,4 @@ _deps
 .vscode
 target
 *.class
+/scaffold
