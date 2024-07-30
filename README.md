@@ -2,6 +2,8 @@
 
 DCIMG reader for MATLAB and Fiji.
 
+DCIMG is an image format produced by Hamamatsu cameras. It is designed for high-speed data storage.
+
 ## MATLAB MEX Functions
 
 Download ``DCIMG-MEX-Windows-x64.zip`` from releases.
