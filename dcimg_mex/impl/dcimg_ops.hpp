@@ -40,7 +40,19 @@ int dcimg_get_size(const std::string &filename, int *n_frames, int *height,
 int dcimg_read_frame(const std::string &filename, int frame_id, void **image,
                      int *height, int *width, int *pixel_bytes);
 
-int dcimg_read_all(const std::string &filename, void **image, int *n_frames,
-                   int *height, int *width, int *pixel_bytes);
+/* Reads a range of frames from DCIMG file.
+ * To know the size of the buffer to allocate, call dcimg_get_size.
+ * 
+ * Usage:
+ *   void *buffer = malloc(n_frames * height * width * pixel_bytes);
+ *   dcimg_read_range("filename.dcimg", 0, 10, buffer);
+ * 
+ * Args:
+ *   filename: DCIMG filename.
+ *   start_frame: 0-indexed frame id.
+ *   n_frames: number of frames to read.
+ *   buffer: buffer to store image data. Must be pre-allocated by the caller.
+ */
+int dcimg_read_range_to_buffer(const std::string &filename, int start_frame, int n_frames, void *buffer);
 
 #endif

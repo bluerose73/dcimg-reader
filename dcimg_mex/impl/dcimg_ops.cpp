@@ -138,6 +138,7 @@ BOOL get_image_information(HDCIMG hdcimg, int32 &width, int32 &height,
   return TRUE;
 }
 
+// image is allocated by hdcimg_read_frame
 int hdcimg_read_frame(HDCIMG hdcimg, int frame_id, void **image, int *height_ptr,
                       int *width_ptr, int *pixel_bytes_ptr) {
   DCIMG_ERR err;
@@ -177,6 +178,50 @@ int hdcimg_read_frame(HDCIMG hdcimg, int frame_id, void **image, int *height_ptr
   }
 
   *image = buf;
+  *height_ptr = height;
+  *width_ptr = width;
+  *pixel_bytes_ptr = pixel_bytes;
+
+  return 0;
+}
+
+// Same as hdcimg_read_frame, but buffer is allocated by the caller
+int hdcimg_read_frame_to_buffer(HDCIMG hdcimg, int frame_id, void *buffer, int *height_ptr,
+                      int *width_ptr, int *pixel_bytes_ptr) {
+  DCIMG_ERR err;
+
+  DCIMG_FRAME imgframe;
+  memset(&imgframe, 0, sizeof(imgframe));
+  imgframe.size = sizeof(imgframe);
+  imgframe.iFrame = frame_id;
+
+  int32 width, height, rowbytes, pixeltype;
+  if (!get_image_information(hdcimg, width, height, rowbytes, pixeltype))
+    return -1;
+
+  int pixel_bytes;
+  switch (pixeltype) {
+  case DCIMG_PIXELTYPE_MONO8:
+    pixel_bytes = 1;
+    break;
+  case DCIMG_PIXELTYPE_MONO16:
+    pixel_bytes = 2;
+    break;
+  default:
+    return -1;
+  }
+
+  imgframe.buf = buffer;
+  imgframe.width = width;
+  imgframe.height = height;
+  imgframe.rowbytes = rowbytes;
+  imgframe.type = (DCIMG_PIXELTYPE)pixeltype;
+
+  err = dcimg_copyframe(hdcimg, &imgframe);
+  if (failed(err)) {
+    return -1;
+  }
+
   *height_ptr = height;
   *width_ptr = width;
   *pixel_bytes_ptr = pixel_bytes;
@@ -238,34 +283,30 @@ int dcimg_read_frame(const std::string &filename, int frame_id, void **image,
   return 0;
 }
 
-// Not Implemented
-// int dcimg_read_all(const std::string &filename, void **image, int *n_frames,
-//                    int *height, int *width, int *pixel_bytes) {
-//   int err_code;
-//   DCIMG_ERR dcimg_err;
+int dcimg_read_range_to_buffer(const std::string &filename, int start_frame, int n_frames, void *buffer) {
+  int err_code;
+  DCIMG_ERR dcimg_err;
 
-//   HDCIMG dcimg_handle;
-//   err_code = dcimg_init_open(filename, &dcimg_handle);
-//   if (err_code != 0) {
-//     return err_code;
-//   }
+  HDCIMG dcimg_handle;
+  err_code = dcimg_init_open(filename, &dcimg_handle);
+  if (err_code != 0) {
+    return err_code;
+  }
 
-//   // access frame data
-//   int row_stride;
-//   void *buffer;
-//   err_code = lock_frame_helper(dcimg_handle, frame_id, &buffer, height, width,
-//                                pixel_bytes, &row_stride);
-//   if (err_code != 0) {
-//     return err_code;
-//   }
+  // access frame data
+  int height, width, pixel_bytes;
+  for (int i = start_frame; i < start_frame + n_frames; i++) {
+    err_code = hdcimg_read_frame_to_buffer(dcimg_handle, i, buffer, &height, &width, &pixel_bytes);
+    if (err_code != 0) {
+      return err_code;
+    }
+    buffer = (void *)((char *)buffer + height * width * pixel_bytes);
+  }
 
-//   *image = malloc((*height) * (*width) * (*pixel_bytes));
-//   copy_frame_row_major(*image, buffer, *height, *width, *pixel_bytes, row_stride);
+  dcimg_err = dcimg_close(dcimg_handle);
+  if (failed(dcimg_err)) {
+    return -1;
+  }
 
-//   dcimg_err = dcimg_close(dcimg_handle);
-//   if (failed(dcimg_err)) {
-//     return -1;
-//   }
-
-//   return 0;
-// }
+  return 0;
+}

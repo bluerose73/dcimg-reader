@@ -16,6 +16,7 @@ Example Usage
 [height, width, n_frames] = dcimg_get_size('filename.dcimg')
 
 image = dcimg_read_frame('filename.dcimg', 1)  % read the 1st frame (1-indexed)
+image = dcimg_read_frame_range('filename.dcimg', 1, 100)  % read frame 100 frames starting from frame 1
 ```
 
 ## Fiji Plugin
